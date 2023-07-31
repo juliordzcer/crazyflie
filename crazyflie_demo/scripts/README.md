@@ -2,11 +2,6 @@
 
 The desired trajectories are stored in `setpoint.py` and `setpoint.py`.
 
-### Joystick
-Joystick configuration is stored in `joystick.py`
+### External Position
 
-### Attitude Controller
-The operation of the `select_controller.py` code is to change the attitude controllers, without having to change the firmware.
-
-### Leader information for multi-agents
-In order to send the necessary information for multi-agent controllers, from the leader to the followers, in the `publish_info_leader.py` script, create a topic to send the leader's acceleration.
+The position of the Crazyflie is determined using VRPN and sent through the VRPN.py program.
