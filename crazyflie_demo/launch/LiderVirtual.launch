@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Configuración del joystick -->
+  <arg name="joy_dev" default="/dev/input/js0" />
+
+  <!-- Configuración del Crazyflie 1 -->
+  <arg name="uri1" default="radio://0/80/2M/E7E7E7E701" />
+  <arg name="frame1" default="crazyflie1" />
+
+  <!-- Configuración del Crazyflie 2 -->
+  <arg name="uri2" default="radio://1/90/2M/E7E7E7E702" />
+  <arg name="frame2" default="crazyflie2" />
+
+  <!-- Parámetros de formación -->
+  <arg name="xi1" default="-0.2" />
+  <arg name="yi1" default="0.0" />
+  <arg name="zi1" default="0.0" />
+
+  <arg name="xi2" default="0.2" />
+  <arg name="yi2" default="0.0" />
+  <arg name="zi2" default="0.0" />
+
+  <!-- 
+  Seleccione el controlador de orientacion:
+
+  1.- PID (Bitcraze)
+  2.- Mellinger (Bitcraze)
+  3.- INDI (Bitcraze)
+  4.- Brescanccini (Bitcraze)
+  5.- Sliding Mode Control
+  6.- Backstepping
+  7.- Twisting Continuo
+  8.- Super Twisting Algoritm
+  9.- Nonsingular Terminal Sliding Mode Control
+  10.- Singular Terminal Sliding Mode Control
+  11.- PID (Newtons)
+    -->
+
+  <arg name="n1" default="1" />
+  <arg name="n2" default="1" />
+
+  <!-- Parámetros de la trayectoria deseada -->
+  <arg name="r" default="0.2" />
+  <arg name="h" default="0.6" />
+
+  <include file="$(find crazyflie)/launch/crazyflie_server.launch">
+  </include>
+
+    <node name="guardar_datos" pkg="crazyflie_demo" type="Graficar.py" output="screen">
+      <param name="n1" value="$(arg n1)" />
+      <param name="n2" value="$(arg n2)" />
+  </node>
+
+
+  <node pkg="vrpn_client_ros" type="vrpn_client_node" name="vrpn_client_node" output="screen">
+    <rosparam subst_value="true">
+      server: "192.168.2.10" 
+      port: "3883" 
+      update_frequency: 50.0
+      frame_id: world
+      use_server_time: false
+      broadcast_tf: true
+      refresh_tracker_frequency: 1.0
+    </rosparam>
+  </node>
+
+  <!-- First drone -->
+  <group ns="crazyflie1">
+    <include file="$(find crazyflie)/launch/crazyflie_add.launch">
+      <arg name="uri" value="$(arg uri1)" />
+      <arg name="tf_prefix" value="crazyflie1" />
+    </include>
+    
+    <node name="joy" pkg="joy" type="joy_node" output="screen">
+      <param name="dev" value="$(arg joy_dev)" />
+    </node>
+    <node name="setpoint" pkg="crazyflie_demo" type="setpoint.py" output="screen">
+        <param name="xi" value="$(arg xi1)" />
+        <param name="yi" value="$(arg yi1)" />
+        <param name="zi" value="$(arg zi1)" />
+        <param name="h" value="$(arg h)" />
+        <param name="r" value="$(arg r)" />
+    </node>
+
+    <node name="pose1" pkg="crazyflie_demo" type="vrpn.py" output="screen"> 
+      <param name="topic" value="/vrpn_client_node/crazyflie1/pose" />
+    </node>
+  </group>
+
+  <!-- Second drone -->
+  <group ns="crazyflie2">
+    <include file="$(find crazyflie)/launch/crazyflie_add.launch">
+      <arg name="uri" value="$(arg uri2)" />
+      <arg name="tf_prefix" value="crazyflie2" />
+    </include>
+    
+    <node name="joy" pkg="joy" type="joy_node" output="screen">
+      <param name="dev" value="$(arg joy_dev)" />
+    </node>
+    <node name="setpoint" pkg="crazyflie_demo" type="setpoint2.py" output="screen">
+        <param name="xi" value="$(arg xi2)" />
+        <param name="yi" value="$(arg yi2)" />
+        <param name="zi" value="$(arg zi2)" />
+        <param name="h" value="$(arg h)" />
+        <param name="r" value="$(arg r)" />
+    </node>
+
+    <node name="pose2" pkg="crazyflie_demo" type="vrpn2.py" output="screen"> 
+    <param name="topic" value="/vrpn_client_node/crazyflie2/pose" />    
+</node>
+  </group>
+
+</launch>
