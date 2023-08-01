@@ -13,18 +13,6 @@ vrpn
 https://github.com/ros-drivers/vrpn_client_ros
 
 
-## Crazyflie ros
-
-ROS stack for Bitcraze Crazyflie (http://www.bitcraze.se/), with the following features:
-
-* Support for Crazyflie 1.0 and Crazyflie 2.0 (using stock firmware)
-* Publishes on-board sensors in ROS standard message formats
-* Supports ROS parameters to reconfigure crazyflie parameters
-* Support for using multiple Crazyflies with a single Crazyradio
-* Includes external controller for waypoint navigation (if motion capture system is available)
-
-A tutorial (for a slightly older version) is available in W. Hönig and N. Ayanian. "Flying Multiple UAVs Using ROS", Chapter in Robot Operating System (ROS): The Complete Reference (Volume 2), Springer, 2017. (see http://act.usc.edu/publications.html for a free pre-print).
-
 ## Requirements
 
 ### Installing ROS 
