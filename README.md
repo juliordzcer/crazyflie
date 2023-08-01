@@ -123,27 +123,19 @@ Note that the below description might be slightly out-of-date, as we continue me
 This package contains the driver. In order to support multiple Crazyflies with a single Crazyradio, there is crazyflie_server (communicating with all Crazyflies) and crazyflie_add to dynamically add Crazyflies.
 The server does not communicate to any Crazyflie initially, hence crazyflie_add needs to be used.
 
-### Crazyflie_description
-
-This package contains a 3D model of the Crazyflie (1.0). This is for visualization purposes in rviz.
-
-### Crazyflie_controller
-
-This package contains the position controller for trajectory tracking.
-
 ### Crazyflie_demo
 
 This package contains a set of examples to quickly get started with Crazyflie.
 
 To follow a trajectory using a crazyflie:
 ```
-roslaunch crazyflie_demo Run_trajectory.launch uri:=radius://0/100/2M
+roslaunch crazyflie_demo Individual.launch uri:=radio://0/100/2M
 ```
 where uri specifies the uri of your Crazyflie.
 
 To start the path of two agents:
 ```
-roslaunch crazyflie_demo Multiagents.launch
+roslaunch crazyflie_demo LiderVirtual.launch
 ```
 You can modify the crazyflie uri parameters as well as the VRPN parameters in the Multiagent.launch launch file.
 located in the crazyflie_demo/launch folder
